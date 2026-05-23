@@ -1,33 +1,49 @@
-import sqlite3 #used to create & use database
+import sqlite3
 import os
-DB_PATH = os.path.join("data","documents.db") #  Database file will be stored at: DB_PATH 
 
-def get_connection():   #Open connection to database file
+DB_PATH = os.path.join("data", "documents.db")
+
+def get_connection():
     return sqlite3.connect(DB_PATH)
 
-def init():  #Initialize database (create table)
-    conn = get_connection()  #connection to DB
-    cursor = conn.cursor() #used to run SQL queries
+def init_db():
+    conn = get_connection()
+    cursor = conn.cursor()
 
-   # document table schema
+    # Document table - Schema
     cursor.execute("""
-            CREATE TABLE IF NOT EXIST documents (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT,
-                path TEXT,
-                thumbnail_path TEXT,
-                tags TEXT,
-                description TEXT,
-                upload_date TEXT,
-                lecture_date TEXT,
-                total_pages INTEGER 
-            )
-    """)
-    conn.commit()
-    print("DB operation successfull")
-    conn.close()
+        CREATE TABLE IF NOT EXISTS documents (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        path TEXT,
+        thumbnail_path TEXT,
+        tags TEXT,
+        description TEXT,
+        upload_date TEXT,
+        lecture_date TEXT,
+        total_pages INTEGER
+        )
+    """
+    )
 
-    
-    
-    
-    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS page_visits (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        document_id INTEGER,
+        page_number INTEGER,
+        timestamp TEXT
+    )
+    """)
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS app_visits (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        event_type TEXT,
+        timestamp TEXT
+    )
+    """)
+
+
+    conn.commit()
+    # print("DB operation successfull.")
+    conn.close()
