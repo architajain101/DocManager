@@ -4,6 +4,6 @@
 data/documents.db
 db/__pycache__/
 
-storage/pdfs/
-storage/thumbnails/
-.env
+# storage/pdfs/
+# storage/thumbnails/
+# .env
